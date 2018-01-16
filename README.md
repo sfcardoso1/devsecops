@@ -1,4 +1,4 @@
-#Ansible Role: Compliance/Hardening
+# Ansible Role: Compliance/Hardening
 
 Simple ansible role to harden linux systems and set few configuration.
 
