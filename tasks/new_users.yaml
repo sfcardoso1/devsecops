@@ -1,0 +1,29 @@
+---
+ - name: Adding all users
+   user:
+     name: "{{ item.name }}"
+     state: present
+     password: "{{ item.password }}"
+   with_items:
+      - { name: 'user1', password: '$1$La6U30QP$RK.jGwwrQvd8X723bX5oc.' }
+      - { name: 'user2', password: '$1$La6U30QP$RK.jGwwrQvd8X723bX5oc.' }
+      - { name: 'user3', password: '$1$FL/KQOHc$TPdoomJZxOcn4b.zAOYgt/' }
+      - { name: 'user4', password: '$1$FL/KQOHc$TPdoomJZxOcn4b.zAOYgt/' }
+      - { name: 'user5', password: '$1$Corpflex$Qbw52vO.ow3U75I.tDlFl0' }
+ - name: Criando arquivo para edição do arquivo sudoers
+   command: cp -f /etc/sudoers /etc/sudoers.tmp
+
+ - name: Sudoing all users
+   lineinfile:
+     dest: /etc/sudoers.tmp
+     state: present
+     regexp: "{{ item.regexp }}"
+     line: "{{ item.line }}"
+   with_items:
+      - { regexp: '^user1', line: 'user1 ALL=(ALL) ALL' }
+      - { regexp: '^user2', line: 'user2 ALL=(ALL) ALL' }
+      - { regexp: '^user3', line: 'user3 ALL=(ALL) ALL' }
+      - { regexp: '^user4', line: 'user4 ALL=(ALL) ALL' }
+      - { regexp: '^user5', line: 'user5 ALL=(ALL) ALL' }
+ - name: Check if sudoers file is OK
+   shell: /usr/sbin/visudo -q -c -f /etc/sudoers.tmp && cp -f /etc/sudoers.tmp /etc/sudoers
